@@ -62,8 +62,8 @@
 There is a distinction between structure elements that are block vs inline. A block element is meant to be a distinct block in the flow of the content structure. An inline element is meant to be inline with the content flow of a block element. In other words, inline elements do not disrupt the flow of a block element's content. For example, the block element div (division) could have an inline element b in order to bring attention to a portion of its sub-text. Likewise a p (paragraph) element could have a span to mark the paragraph's sub-text as a person's name.
 
 '''
-< div>He said <b>don't</b> cross the beams.</div>
-< p>Authors such as <span>ee cummings</span> often used unconventional structure.</p>
+<div>He said <b>don't</b> cross the beams.</div>
+<p>Authors such as <span>ee cummings</span> often used unconventional structure.</p>
 '''
 
 | Element    | Meaning                          | Example                                        |

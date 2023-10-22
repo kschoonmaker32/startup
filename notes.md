@@ -61,8 +61,10 @@
 
 There is a distinction between structure elements that are block vs inline. A block element is meant to be a distinct block in the flow of the content structure. An inline element is meant to be inline with the content flow of a block element. In other words, inline elements do not disrupt the flow of a block element's content. For example, the block element div (division) could have an inline element b in order to bring attention to a portion of its sub-text. Likewise a p (paragraph) element could have a span to mark the paragraph's sub-text as a person's name.
 
+'''
 < div>He said <b>don't</b> cross the beams.</div>
 < p>Authors such as <span>ee cummings</span> often used unconventional structure.</p>
+'''
 
 | Element    | Meaning                          | Example                                        |
 | ---------- | -------------------------------- | ---------------------------------------------- |
@@ -76,3 +78,6 @@ There is a distinction between structure elements that are block vs inline. A bl
 | `label`    | Individual input label           | `<label for="range">Range: </label>`           |
 | `output`   | Output of input                  | `<output for="range">0</output>`               |
 | `meter`    | Display value with a known range | `<meter min="0" max="100" value="50"></meter>` |
+
+Form element
+The main purpose of the form element is to submit the values of the inputs it contains. Before JavaScript was introduced the form container element was essential because it was the only way for the browser to send the input data to a web server as part of a request to process the input and generate a new web page displaying the result of the input. With JavaScript we have much more control over input data and what is done with it. For example, in a single page application the JavaScript will dynamically rebuild the HTML elements to reflect the results of the user interaction. With this ability the data may not even be sent to the server. This greatly reduces the necessity of the form element, but it is often still used simply as a container. Just remember that you are not required to have a form element to use input elements.

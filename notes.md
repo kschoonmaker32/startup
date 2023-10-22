@@ -91,3 +91,8 @@ Some text
   <button type="submit">Submit</button>
 </form>
 ~~~
+
+Pressing the submit button sends the following data to the web server. The browser generates the data by combining the textarea's name attribute with the current value of the textarea.
+~~~
+ta-id=Some+text
+~~~

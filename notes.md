@@ -61,18 +61,18 @@
 
 There is a distinction between structure elements that are block vs inline. A block element is meant to be a distinct block in the flow of the content structure. An inline element is meant to be inline with the content flow of a block element. In other words, inline elements do not disrupt the flow of a block element's content. For example, the block element div (division) could have an inline element b in order to bring attention to a portion of its sub-text. Likewise a p (paragraph) element could have a span to mark the paragraph's sub-text as a person's name.
 
-<div>He said <b>don't</b> cross the beams.</div>
-<p>Authors such as <span>ee cummings</span> often used unconventional structure.</p>
+< div>He said <b>don't</b> cross the beams.</div>
+< p>Authors such as <span>ee cummings</span> often used unconventional structure.</p>
 
-html inputs
-Element	Meaning	Example
-form	Input container and submission	<form action="form.html" method="post">
-fieldset	Labeled input grouping	<fieldset> ... </fieldset>
-input	Multiple types of user input	<input type="" />
-select	Selection dropdown	<select><option>1</option></select>
-optgroup	Grouped selection dropdown	<optgroup><option>1</option></optgroup>
-option	Selection option	<option selected>option2</option>
-textarea	Multiline text input	<textarea></textarea>
-label	Individual input label	<label for="range">Range: </label>
-output	Output of input	<output for="range">0</output>
-meter	Display value with a known range	<meter min="0" max="100" value="50"></meter>
+| Element    | Meaning                          | Example                                        |
+| ---------- | -------------------------------- | ---------------------------------------------- |
+| `form`     | Input container and submission   | `<form action="form.html" method="post">`      |
+| `fieldset` | Labeled input grouping           | `<fieldset> ... </fieldset>`                   |
+| `input`    | Multiple types of user input     | `<input type="" />`                            |
+| `select`   | Selection dropdown               | `<select><option>1</option></select>`          |
+| `optgroup` | Grouped selection dropdown       | `<optgroup><option>1</option></optgroup>`      |
+| `option`   | Selection option                 | `<option selected>option2</option>`            |
+| `textarea` | Multiline text input             | `<textarea></textarea>`                        |
+| `label`    | Individual input label           | `<label for="range">Range: </label>`           |
+| `output`   | Output of input                  | `<output for="range">0</output>`               |
+| `meter`    | Display value with a known range | `<meter min="0" max="100" value="50"></meter>` |

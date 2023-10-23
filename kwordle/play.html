@@ -26,75 +26,60 @@
       <!-- Since we don't have the ability to style we use old style HTML to give some visual formatting -->
       <hr />
     </header>
-
-    <main>
-      <div class="players">
-        Player:
-        <span class="player-name">Mystery player</span>
+    <body>
+      <h1> Kwordle </h1>
+      
+      <div id="game-board">
+  
       </div>
-      <ul class="notification">
-        <li class="player-name">Tim started a new game</li>
-        <li class="player-name">Ada started a new game</li>
-        <li class="player-name">Tim scored 337</li>
-      </ul>
-
-      <!-- More formatting with old style HTML -->
-      <br />
-
-      <div>
-        <label for="count">Score</label>
-        <input type="text" id="count" value="--" readonly />
+  
+      <div id="keyboard-cont">
+          <div class="first-row">
+              <button class="keyboard-button">q</button>
+              <button class="keyboard-button">w</button>
+              <button class="keyboard-button">e</button>
+              <button class="keyboard-button">r</button>
+              <button class="keyboard-button">t</button>
+              <button class="keyboard-button">y</button>
+              <button class="keyboard-button">u</button>
+              <button class="keyboard-button">i</button>
+              <button class="keyboard-button">o</button>
+              <button class="keyboard-button">p</button>
+          </div>
+          <div class="second-row">
+              <button class="keyboard-button">a</button>
+              <button class="keyboard-button">s</button>
+              <button class="keyboard-button">d</button>
+              <button class="keyboard-button">f</button>
+              <button class="keyboard-button">g</button>
+              <button class="keyboard-button">h</button>
+              <button class="keyboard-button">j</button>
+              <button class="keyboard-button">k</button>
+              <button class="keyboard-button">l</button>
+          </div>
+          <div class="third-row">
+              <button class="keyboard-button">Del</button>
+              <button class="keyboard-button">z</button>
+              <button class="keyboard-button">x</button>
+              <button class="keyboard-button">c</button>
+              <button class="keyboard-button">v</button>
+              <button class="keyboard-button">b</button>
+              <button class="keyboard-button">n</button>
+              <button class="keyboard-button">m</button>
+              <button class="keyboard-button">Enter</button>
+          </div>
       </div>
+  
+  <!-- placeholeder for java<script
+  src=""
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+  <script src=""></script>
+  <script src="script.js" type="module"></script> -->
 
-      <br />
-
-      <div>
-        <button>Reset</button>
-      </div>
-
-      <br />
-
-      <div>
-        <table>
-          <tr>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <!-- SVG
-                    M move <to x,y>
-                    Q quadratic curve <control point x,y> <to x,y>
-                -->
-                  <path d="M 95,5 95,95 5,95 Q 5,5 95,5" fill="green" />
-                </svg>
-              </button>
-            </td>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <path d="M5,5 5,95 95,95 Q 95,5 5,5" fill="red" />
-                </svg>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <path d="M5,5 95,5 95,95 Q 5,95 5,5" fill="blue" />
-                </svg>
-              </button>
-            </td>
-            <td>
-              <button>
-                <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                  <path d="M95,5 5,5 5,95 Q 95,95 95,5" fill="yellow" />
-                </svg>
-              </button>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </main>
+  <!--placeholder for database connection to retrieve daily word-->
+  </body>
+  </html>
 
     <footer>
       <hr />

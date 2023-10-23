@@ -17,6 +17,8 @@
 
 ./deployFiles.sh -k ~/keys/production.pem -h yourdomain.click -s simon
 
+./deployFiles.sh -k ~/Desktop/keys/260InClass.pem -h cs260pro.click -s kwordle
+
 **entry Oct 2023 - things i learned about HTML
 1. <body>
   <p>Body</p>

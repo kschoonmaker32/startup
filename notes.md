@@ -13,6 +13,8 @@
 3. a single extra letter, an extra colon, an errant number - amazing how computer programs are so complex but a single extra curly boi can make the whole thing error out
 4. Success, as always, feels sweet
 
+~/Desktop/keys/260InClass.pem -h cs260pro.click
+
 **entry Oct 2023 - things i learned about HTML
 1. <body>
   <p>Body</p>

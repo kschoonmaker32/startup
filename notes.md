@@ -15,11 +15,11 @@
 
 ~/Desktop/keys/260InClass.pem -h cs260pro.click
 
-./deployFiles.sh -k ~/keys/production.pem -h yourdomain.click -s simon
+./deployFiles.sh -k ~/Desktop/keys/260InClass.pem -h cs260pro.click -s simon
 
 chmod 0600 desktop/keys/260inclass.pem 
 
-./deployFiles.sh -k ~/Desktop/keys/260InClass.pem -h cs260pro.click -s kwordle
+./deployFiles.sh -k ~/Desktop/keys/260InClass.pem -h cs260pro.click -s startup
 
 **entry Oct 2023 - things i learned about HTML
 1. <body>

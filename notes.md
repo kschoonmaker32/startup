@@ -17,6 +17,8 @@
 
 ./deployFiles.sh -k ~/keys/production.pem -h yourdomain.click -s simon
 
+chmod 0600 desktop/keys/260inclass.pem 
+
 ./deployFiles.sh -k ~/Desktop/keys/260InClass.pem -h cs260pro.click -s kwordle
 
 **entry Oct 2023 - things i learned about HTML

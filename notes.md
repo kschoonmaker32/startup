@@ -2955,3 +2955,764 @@ Don't forget to update your GitHub startup repository notes.md with all of the t
 ### 🧧 Possible solution
 
 If you get stuck here is a [possible solution](https://codepen.io/leesjensen/pen/yLRgPNa).
+
+#scope
+
+# Scope
+
+📖 **Deeper dive reading**:
+
+- [MDN Scope](https://developer.mozilla.org/en-US/docs/Glossary/Scope)
+- [MDN this](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this)
+- [MDN Closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
+
+Understanding JavaScript scope is essential for making your programs run as you expect. Scope is defined as the variables that are visible in the current context of execution. JavaScript has four different types of scope:
+
+1. **Global** - Visible to all code
+1. **Module** - Visible to all code running in a module
+1. **Function** - Visible within a function
+1. **Block** - Visible within a block of code delimited by curly braces
+
+## Var
+
+Initially JavaScript used the keyword `var` to declare a variable. The problem with var, unlike `const` or `let`, is that it ignores block scope. Variables declared with `var` are always logically hoisted to the top of the function. For example, the following code shows the same variable name being used within different enclosing scopes. However, because var ignores block scope the for loop is simply assigning a new value to `x` rather than declaring a new variable that has the same name.
+
+```js
+var x = 10;
+console.log('start', x);
+
+for (var x = 0; x < 1; x++) {
+  console.log('middle', x);
+}
+
+console.log('end', x);
+
+// OUTPUT: start 10
+//         middle 0
+//         end 1
+```
+
+⚠ There are few cases where it makes sense to use `var`. It is strongly suggested that you only use `const` and `let` unless you fully understand why you are using `var`.
+
+## This
+
+The keyword `this` represents a variable that points to an object that contains the context within the scope of the currently executing line of code. The `this` variable is automatically declared and you can reference `this` anywhere in a JavaScript program. Because the value of `this` depends upon the context in which it is referenced, there are three different context that this can refer to:
+
+1. **Global** - When `this` is referenced outside a function or object it refers to the `globalThis` object. The globalThis object represents the context for runtime environment. For example, when running in a browser, globalThis refers to the browser's window object.
+1. **Function** - When `this` is referenced in a function it refers to the object that owns the function. That is either an object you defined or globalThis if the function is defined outside of an object. Note that when running in JavaScript strict mode, a global function's this variable is undefined instead of globalThis.
+1. **Object** - When `this` is referenced in an object it refers to the object.
+
+```js
+'use strict';
+
+// global scope
+console.log('global:', this);
+console.log('globalThis:', globalThis);
+
+// function scope for a global function
+function globalFunc() {
+  console.log('globalFunctionThis:', this);
+}
+globalFunc();
+
+// object scope
+class ScopeTest {
+  constructor() {
+    console.log('objectThis:', this);
+  }
+
+  // function scope for an object function
+  objectFunc() {
+    console.log('objectFunctionThis:', this);
+  }
+}
+
+new ScopeTest().objectFunc();
+```
+
+Running the above code in a browser results in the following.
+
+```
+global: Window
+globalThis: Window
+globalFunctionThis: undefined
+objectThis: ScopeTest
+objectFunctionThis: ScopeTest
+```
+
+Note that if we were not using JavaScript strict mode then globalFunctionThis would refer to Window.
+
+## Closure
+
+A closure is defined as a function and its surrounding state. That means whatever variables are accessible when a function is created are available inside that function. This holds true even if you pass the function outside of the scope of its original creation.
+
+Here is an example of a function that is created as part of an object. That means that function has access to the object's `this` pointer.
+
+```js
+globalThis.x = 'global';
+
+const obj = {
+  x: 'object',
+  f: function () {
+    console.log(this.x);
+  },
+};
+
+obj.f();
+// OUTPUT: object
+```
+
+Arrow functions are a bit different because they inherit the `this` pointer of their creation context. So if we change our previous example to return an arrow function, then the `this` pointer at the time of creation will be globalThis.
+
+```js
+globalThis.x = 'global';
+
+const obj = {
+  x: 'object',
+  f: () => console.log(this.x),
+};
+
+obj.f();
+// OUTPUT: global
+```
+
+However, if we make function in our object that **returns** an arrow function, then the `this` pointer will be the object's `this` pointer since that was the active context at the time the arrow function was created.
+
+```js
+globalThis.x = 'global';
+
+const obj = {
+  x: 'object',
+  make: function () {
+    return () => console.log(this.x);
+  },
+};
+
+const f = obj.make();
+f();
+// OUTPUT: object
+```
+
+# JavaScript modules
+
+📖 **Deeper dive reading**: [MDN JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+
+JavaScript modules allow for the partitioning and sharing of code. Initially JavaScript had no support for modules. Node.js, a server side JavaScript execution application, introduced the concept of modules in order to support the importing of packages of JavaScript from third party providers.
+
+JavaScript got full module support with ES6, and they have become the standard module representation as [browser support](https://caniuse.com/es6-module-dynamic-import) for ES modules is now almost universal.
+
+In order to differentiate between the two implementations, Node.js modules are called CommonJS modules, and JavaScript modules are called ES modules. For this discussion, we will focus only on ES modules.
+
+Because modules create a file-based scope for the code they represent, you must explicitly `export` the objects from one file and then `import` them into another file. For example, here is a simple module that exports a function that displays an alert.
+
+**alert.js**
+
+```js
+export function alertDisplay(msg) {
+  alert(msg);
+}
+```
+
+You can import the module's exported function into another module using the `import` keyword.
+
+**main.js**
+
+```js
+import { alertDisplay } from './alert.js';
+
+alertDisplay('called from main.js');
+```
+
+## ES Modules in the browser
+
+When you use ES modules in the browser via HTML script references, things get a little complicated. The key thing to understand is that modules can only be called from other modules. You cannot access JavaScript contained in a module from the global scope that your non-module JavaScript is executing in.
+
+From your HTML, you can specify that you are using an ES module by including a `type` attribute with the value of `module` in the `script` element. You can then import and use other modules. This is shown in the example below.
+
+**index.html**
+
+```html
+<script type="module">
+  import { alertDisplay } from './alert.js';
+  alertDisplay('module loaded');
+</script>
+```
+
+If we want to use a module in the global scope that our HTML or other non-module JavaScript is executing in, then we must leak it into the global scope. We do this by either attaching an event handler or explicitly adding a function to the global window object. In the example below, we expose the `alertDisplay` imported module function by attaching it to the global JavaScript `window` object so that it can then be called from the button `onclick` handler. We also expose the module function by attaching a `keypress` event.
+
+**index.html**
+
+```html
+<html>
+  <body>
+    <script type="module">
+      import { alertDisplay } from './alert.js';
+      window.btnClick = alertDisplay;
+
+      document.body.addEventListener('keypress', function (event) {
+        alertDisplay('Key pressed');
+      });
+    </script>
+    <button onclick="btnClick('button clicked')">Press me</button>
+  </body>
+</html>
+```
+
+Now, if the button is pushed or a key is pressed our ES module function will be called.
+
+## Modules with web frameworks
+
+Fortunately, when you use a web framework bundler, discussed in later instruction, to generate your web application distribution code, you usually don't have to worry about differentiating between global scope and ES module scope. The bundler will inject all the necessary syntax to connect your HTML to your modules. Historically, this was done by removing the modules and placing all of the JavaScript in a namespaced global partition. Now that ES Modules are supported on most browsers, the bundler will expose the ES module directly.
+
+Because of the complex history of modules they can be a confusing topic, but it is well worth the time to understand how they work as they are a core piece of a web programmer's toolkit.
+
+# Document Object Model
+
+📖 **Deeper dive reading**:
+
+- [MDN Introduction to the DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction)
+- [W3C DOM specification](https://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html) - This official specification is only for reference
+
+The Document Object Model (DOM) is an object representation of the HTML elements that the browser uses to render the display. The browser also exposes the DOM to external code so that you can write programs that dynamically manipulate the HTML.
+
+The browser provides access to the DOM through a global variable name `document` that points to the root element of the DOM. If you open the browser's debugger console window and type the variable name `document` you will see the DOM for the document the browser is currently rendering.
+
+```html
+> document
+
+<html lang="en">
+  <body>
+    <p>text1 <span>text2</span></p>
+    <p>text3</p>
+  </body>
+</html>
+```
+
+```css
+p {
+  color: red;
+}
+```
+
+For everything in an HTML document there is a node in the DOM. This includes elements, attributes, text, comments, and whitespace. All of these nodes form a big tree, with the document node at the top.
+
+<img src="dom.jpg"/>
+
+## Accessing the DOM
+
+Every element in an HTML document implements the DOM Element interface, which is derived from the DOM Node interface. The [DOM Element Interface](https://developer.mozilla.org/en-US/docs/Web/API/Element) provides the means for iterating child elements, accessing the parent element, and manipulating the element's attributes. From your JavaScript code, you can start with the `document` variable and walk through the every element in the tree.
+
+```js
+function displayElement(el) {
+  console.log(el.tagName);
+  for (const child of el.children) {
+    displayElement(child);
+  }
+}
+
+displayElement(document);
+```
+
+You can provide a CSS selector to the `querySelectorAll` function in order to select elements from the document. The `textContent` property contains all of the element's text. You can even access a textual representation of an element's HTML content with the `innerHTML` property.
+
+```js
+const listElements = document.querySelectorAll('p');
+for (const el of listElements) {
+  console.log(el.textContent);
+}
+```
+
+## Modifying the DOM
+
+The DOM supports the ability to insert, modify, or delete the elements in the DOM. To create a new element you first create the element on the DOM document. You then insert the new element into the DOM tree by appending it to an existing element in the tree.
+
+```js
+function insertChild(parentSelector, text) {
+  const newChild = document.createElement('div');
+  newChild.textContent = text;
+
+  const parentElement = document.querySelector(parentSelector);
+  parentElement.appendChild(newChild);
+}
+
+insertChild('#courses', 'new course');
+```
+
+To delete elements call the `removeChild` function on the parent element.
+
+```js
+function deleteElement(elementSelector) {
+  const el = document.querySelector(elementSelector);
+  el.parentElement.removeChild(el);
+}
+
+deleteElement('#courses div');
+```
+
+## Injecting HTML
+
+The DOM also allows you to inject entire blocks of HTML into an element. The following code finds the first `div` element in the DOM and replaces all the HTML it contains.
+
+```js
+const el = document.querySelector('div');
+el.innerHTML = '<div class="injected"><b>Hello</b>!</div>';
+```
+
+However, directly injecting HTML as a block of text is a common attack vector for hackers. If an untrusted party can inject JavaScript anywhere in your application then that JavaScript can represent itself as the current user of the application. The attacker can then make requests for sensitive data, monitor activity, and steal credentials. The example below shows how the img element can be used to launch an attack as soon as the page is loaded.
+
+```html
+<img src="bogus.png" onerror="console.log('All your base are belong to us')" />
+```
+
+If you are injecting HTML, make sure that it cannot be manipulated by a user. Common injection paths include HTML input controls, URL parameters, and HTTP headers. Either sanitize any HTML that contains variables, or simply use DOM manipulation functions instead of using `innerHTML`.
+
+## Event Listeners
+
+All DOM elements support the ability to attach a function that gets called when an event occurs on the element. These functions are called [event listeners](https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener). Here is an example of an event listener that gets called when an element gets clicked.
+
+```js
+const submitDataEl = document.querySelector('#submitData');
+submitDataEl.addEventListener('click', function (event) {
+  console.log(event.type);
+});
+```
+
+There are lots of possible events that you can add a listener to. This includes things like mouse, keyboard, scrolling, animation, video, audio, WebSocket, and clipboard events. You can see the full list on [MDN](https://developer.mozilla.org/en-US/docs/Web/Events). Here are a few of the more commonly used events.
+
+| Event Category | Description           |
+| -------------- | --------------------- |
+| Clipboard      | Cut, copied, pasted   |
+| Focus          | An element gets focus |
+| Keyboard       | Keys are pressed      |
+| Mouse          | Click events          |
+| Text selection | When text is selected |
+
+You can also add event listeners directly in the HTML. For example, here is a `onclick` handler that is attached to a button.
+
+```html
+<button onclick='alert("clicked")'>click me</button>
+```
+
+## ☑ Assignment
+
+This [CodePen](https://codepen.io/leesjensen/pen/RwJJZBb) dynamically manipulates the DOM using JavaScript. Create a fork of the pen and take some time to experiment with it. Then complete the following:
+
+1. Add a new table that represents the seven peaks of Utah County.
+
+   - name: "Timpanogos", height: 11750, quality: 4.8
+   - name: "Santaquin", height: 10687, quality: 3.8
+   - name: "Lone Peak", height: 11253, quality: 5
+   - name: "Provo Peak", height: 11068, quality: 4.1
+   - name: "Cascade", height: 10908, quality: 3.2
+   - name: "Nebo", height: 11928, quality: 4.8
+   - name: "Spanish Fork", height: 10192, quality: 3.4
+
+1. Sort the table when a header is clicked on
+
+When you are done submit your CodePen URL to the Canvas assignment.
+
+Don't forget to update your GitHub startup repository notes.md with all of the things you learned and want to remember.
+
+### 🧧 Possible solution
+
+If you get stuck here is a [possible solution](https://codepen.io/leesjensen/pen/yLRgpej).
+
+# Local storage
+
+📖 **Deeper dive reading**: [MDN LocalStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+
+The browser's `localStorage` API provides the ability to persistently store and retrieve data (i.e. scores, usernames, etc.,) on a user's browser across user sessions and HTML page renderings. For example, your frontend JavaScript code could store a user's name on one HTML page, and then retrieve the name later when a different HTML page is loaded. The user's name will also be available in local storage the next time the same browser is used to access the same website.
+
+In addition to persisting application data between page renderings, `localStorage` is also used as a cache for when data cannot be obtained from the server. For example, your frontend JavaScript could store the last high scores obtained from the service, and then display those scores in the future if the service is not available.
+
+## How to use LocalStorage
+
+There are four main functions that can be used with localStorage.
+
+| Function             | Meaning                                      |
+| -------------------- | -------------------------------------------- |
+| setItem(name, value) | Sets a named item's value into local storage |
+| getItem(name)        | Gets a named item's value from local storage |
+| removeItem(name)     | Removes a named item from local storage      |
+| clear()              | Clears all items in local storage            |
+
+A local storage value must be of type `string`, `number`, or `boolean`. If you want to store a JavaScript object or array, then you must first convert it to a JSON string with `JSON.stringify()` on insertion, and parse it back to JavaScript with `JSON.parse()` when retrieved.
+
+## Example
+
+Open your startup website and run the following code in the browser's dev tools console window.
+
+```js
+let user = 'Alice';
+
+let myObject = {
+  name: 'Bob',
+  info: {
+    favoriteClass: 'CS 260',
+    likesCS: true,
+  },
+};
+
+let myArray = [1, 'One', true];
+
+localStorage.setItem('user', user);
+localStorage.setItem('object', JSON.stringify(myObject));
+localStorage.setItem('array', JSON.stringify(myArray));
+
+console.log(localStorage.getItem('user'));
+console.log(JSON.parse(localStorage.getItem('object')));
+console.log(JSON.parse(localStorage.getItem('array')));
+```
+
+**Output**
+
+```sh
+Alice
+{name: 'Bob', info: {favoriteClass: 'CS 260', likesCS: true}
+[1, 'One', true]
+```
+
+Notice that you are able to see the round trip journey of the local storage values in the console output. If you want to see what values are currently set for your application, then open the `Application` tab of the dev tools and select `Storage > Local Storage` and then your domain name. With the dev tools you can add, view, update, and delete any local storage values.
+
+![Local storage dev tools](localStorageDevTools.png)
+
+# Promises
+
+📖 **Deeper dive reading**:
+
+- [MDN Using Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises)
+- [MDN Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+
+JavaScript executes as a single threaded application. That means there is only ever one piece of code executing at the same time. However, the fact that it does not execute concurrently does not mean that it does not execute in parallel. You can asynchronously execute code with the use of a JavaScript `Promise`. Because the execution is asynchronous the promise object can be in one of three states at any given point in time.
+
+1. **pending** - Currently running asynchronously
+1. **fulfilled** - Completed successfully
+1. **rejected** - Failed to complete
+
+You create a promise by calling the Promise object constructor and passing it an executor function that runs the asynchronous operation. Executing asynchronously means that promise constructor may return before the promise executor function runs.
+
+We can demonstrate asynchronous execution by using the standard JavaScript `setTimeout` function to create a delay in the execution of the code. The setTimeout function takes the number of milliseconds to wait and a function to call after that amount of time has expired. We call the delay function in a for loop in the promise executor and also a for loop outside the promise so that both code blocks are running in parallel.
+
+```js
+const delay = (msg, wait) => {
+  setTimeout(() => {
+    console.log(msg, wait);
+  }, 1000 * wait);
+};
+
+new Promise((resolve, reject) => {
+  // Code executing in the promise
+  for (let i = 0; i < 3; i++) {
+    delay('In promise', i);
+  }
+});
+
+// Code executing after the promise
+for (let i = 0; i < 3; i++) {
+  delay('After promise', i);
+}
+
+// OUTPUT:
+//   In promise 0
+//   After promise 0
+//   In promise 1
+//   After promise 1
+//   In promise 2
+//   After promise 2
+```
+
+## Resolving and rejecting
+
+Now that we know how to use a promise to execute asynchronously, we need to be able to set the state to `fulfilled` when things complete correctly, or to `rejected` when an error happens. The promise executor function takes two functions as parameters, `resolve` and `reject`. Calling `resolve` sets the promise to the `fulfilled` state, and calling `reject` sets the promise to the `rejected` state.
+
+Consider the following "coin toss" promise that waits ten seconds and then has a fifty percent chance of resolving or rejecting.
+
+```js
+const coinToss = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    if (Math.random() > 0.5) {
+      resolve('success');
+    } else {
+      reject('error');
+    }
+  }, 10000);
+});
+```
+
+If you log the coinToss promise object to the console immediately after calling the constructor, it will display that it is in the `pending` state.
+
+```js
+console.log(coinToss);
+// OUTPUT: Promise {<pending>}
+```
+
+If you then wait ten seconds and the log the coinToss promise object again, the state will either show as `fulfilled` or `rejected` depending upon the way the coin landed.
+
+```js
+console.log(coinToss);
+// OUTPUT: Promise {<fulfilled>}
+```
+
+## Then, catch, finally
+
+With the ability to asynchronously execute and set the resulting state, we now need a way to generically do something with the result of a promise after it resolves. This is done with functionality similar to exception handling. The promise object has three functions: `then`, `catch`, and `finally`. The `then` function is called if the promise is fulfilled, `catch` is called if the promise is `rejected`, and `finally` is always called after all the processing is completed.
+
+We can rework our coinToss example and make it so 10 percent of the time the coin falls off the table and resolves to the rejected state. Otherwise the promise resolves to fulfilled with a result of either `heads` or `tails`.
+
+```js
+const coinToss = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    if (Math.random() > 0.1) {
+      resolve(Math.random() > 0.5 ? 'heads' : 'tails');
+    } else {
+      reject('fell off table');
+    }
+  }, 10000);
+});
+```
+
+We then chain the `then`, `catch` and `finally` functions to the coinToss object in order to handle each of the possible results.
+
+```js
+coinToss
+  .then((result) => console.log(`Coin toss result: ${result}`))
+  .catch((err) => console.log(`Error: ${err}`))
+  .finally(() => console.log('Toss completed'));
+
+// OUTPUT:
+//    Coin toss result: tails
+//    Toss completed
+```
+
+## The observer pattern
+
+Promises are the standard way to do asynchronous processing in JavaScript, but they are not the only way. The `Observer` pattern, popularized by web programming frameworks such as `Angular`, use a model called `Observer`. The major difference between Observers and Promises is that Promises immediately begin to execute when the Promise is created, but Observers form a pipeline that you then pass an execution object into. This allows Observers to be reused, and the result of executing an Observable to be saved as a history of a particular execution.
+
+## ☑ Assignment
+
+This [CodePen](https://codepen.io/leesjensen/pen/RwJJKwj) uses promises to order pizzas. Create a fork of the pen and take some time to experiment with it. Modify the CodePen to include a new function that makes the pizza and include it in the promise chain.
+
+When you are done submit your CodePen URL to the Canvas assignment.
+
+### 🧧 Possible solution
+
+If you get stuck here is a [possible solution](https://codepen.io/leesjensen/pen/vYVgpyL).
+
+
+# JavaScript Async/await
+
+📖 **Deeper dive reading**: [MDN async function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
+
+JavaScript Promise objects are great for asynchronous execution, but as developers began to build large systems with promises they started wanting a more concise representation. This was provided with the introduction of the `async/await` syntax. The `await` keyword wraps the execution of a promise and removed the need to chain functions. The `await` expression will block until the promise state moves to `fulfilled`, or throws an exception if the state moves to `rejected`. For example, if we have a function that returns a coin toss promise.
+
+```js
+const coinToss = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (Math.random() > 0.1) {
+        resolve(Math.random() > 0.5 ? 'heads' : 'tails');
+      } else {
+        reject('fell off table');
+      }
+    }, 1000);
+  });
+};
+```
+
+We can create equivalent executions with either a promise `then/catch` chain, or an `await` with a `try/catch` block.
+
+**then/catch chain version**
+
+```js
+coinToss()
+  .then((result) => console.log(`Toss result ${result}`))
+  .catch((err) => console.error(`Error: ${err}`))
+  .finally(() => console.log(`Toss completed`));
+```
+
+**async, try/catch version**
+
+```js
+try {
+  const result = await coinToss();
+  console.log(`Toss result ${result}`);
+} catch (err) {
+  console.error(`Error: ${err}`);
+} finally {
+  console.log(`Toss completed`);
+}
+```
+
+## async
+
+One important restriction for working with `await` is that you cannot call await unless it is called at the top level of the JavaScript, or is in a function that is defined with the `async` keyword. Applying the `async` keyword transforms the function so that it returns a promise that will resolve to the value that was previously returned by the function. Basically this turns any function into an asynchronous function, so that it can in turn make asynchronous requests.
+
+This can be demonstrated with a function that makes animal noises. Notice that the return value is a simple string.
+
+```js
+function cow() {
+  return 'moo';
+}
+console.log(cow());
+// OUTPUT: moo
+```
+
+If we designate the function to be asynchronous then the return value becomes a promise that is immediately resolved and has a value that is the return value of the function.
+
+```js
+async function cow() {
+  return 'moo';
+}
+console.log(cow());
+// OUTPUT: Promise {<fulfilled>: 'moo'}
+```
+
+We then change the cow function to explicitly create a promise instead of the automatically generated promise that the await keyword generates.
+
+```js
+async function cow() {
+  return new Promise((resolve) => {
+    resolve('moo');
+  });
+}
+console.log(cow());
+// OUTPUT: Promise {<pending>}
+```
+
+You can see that the promise is in the pending state because the promise's execution function has not yet resolved.
+
+## await
+
+The `async` keyword declares that a function returns a promise. The `await` keyword wraps a call to the `async` function, blocks execution until the promise has resolved, and then returns the result of the promise.
+
+We can demonstrate `await` in action with the cow promise from above. If we log the output from invoking `cow` then we see that the return value is a promise. However, if we prefix the call to the function with the await keyword, execution will stop until the promise has resolved, at which point the result of the promise is returned instead of the actual promise object.
+
+```js
+console.log(cow());
+// OUTPUT: Promise {<pending>}
+
+console.log(await cow());
+// OUTPUT: moo
+```
+
+By combining `async`, to define functions that return promises, with `await`, to wait on the promise, you can create code that is asynchronous, but still maintains the flow of the code without explicitly using callbacks.
+
+## Putting it all together
+
+You can see the benefit for `async`/`await` clearly by considering a case where multiple promises are required. For example, when calling the `fetch` web API on an endpoint that returns JSON, you would need to resolve two promises. One for the network call, and one for converting the result to JSON. A promise implementation would look like the following.
+
+```js
+const httpPromise = fetch('https://simon.cs260.click/api/user/me');
+const jsonPromise = httpPromise.then((r) => r.json());
+jsonPromise.then((j) => console.log(j));
+console.log('done');
+
+// OUTPUT: done
+// OUTPUT: {email: 'bud@mail.com', authenticated: true}
+```
+
+With async/await, you can clarify the code intent by hiding the promise syntax, and also make the execution block until the promise is resolved.
+
+```js
+const httpResponse = await fetch('https://simon.cs260.click/api/user/me');
+const jsonResponse = await httpResponse.json();
+console.log(jsonResponse));
+console.log('done');
+
+// OUTPUT: {email: 'bud@mail.com', authenticated: true}
+// OUTPUT: done
+```
+
+## ☑ Assignment
+
+Fork this [CodePen](https://codepen.io/leesjensen/pen/RwJJKwj) that uses promises and convert it to use `async`/`await`.
+
+When you are done submit your CodePen URL to the Canvas assignment.
+
+### 🧧 Possible solution
+
+If you get stuck here is a [possible solution](https://codepen.io/leesjensen/pen/KKeevVg)
+
+# Simon JavaScript
+
+🎥 **Instruction video**: [Simon JavaScript](https://youtu.be/hqzXN-n2Q5I)
+
+![Simon](../simon.png)
+
+This deliverable demonstrates the use of basic JavaScript for interactivity. This addition makes the application completely functional. The application has a login (home), game play, high scores, and about page. Each page contains a header that provides navigation between the pages, and a footer that references the source repository.
+
+## Adding JavaScript
+
+The major changes to the application include the introduction of `login.js`, `play.js`, and `scores.js`. When a user enters their login name, `login.js` puts that name in the browser's local storage so that it is available the next time they use the application. `play.js` controls all the game interactions and stores the resulting score in the browser's local storage. `scores.js` retrieves the high scores from local storage so that they can be displayed.
+
+You can view this application running here: [Example Simon JavaScript](https://simon-javascript.cs260.click)
+
+![Simon JavaScript](simonJavascript.gif)
+
+### index.html and login.js
+
+The first place we used JavaScript in Simon, allows the user to provide their name. We then store that name in the Browser's local storage cache. Once in the cache we can read the value from other html pages, or even later browser sessions on the same device.
+
+Notice the inclusion of a `onclick` call to the `login` function found in the `login.js` file. We reference the `login.js` file by including an HTML `script` element.
+
+```html
+<script src="login.js"></script>
+
+//...
+
+<input type="text" id="name" placeholder="Your name here" />
+<button class="btn btn-primary" onclick="login()">Login</button>
+```
+
+In the `login.js` file we handle a click on the login button by using the document object's querySelector function to get the input element's value and store it in local storage. We then redirect the browser to display the `play.html` page.
+
+```js
+function login() {
+  const nameEl = document.querySelector('#name');
+  localStorage.setItem('userName', nameEl.value);
+  window.location.href = 'play.html';
+}
+```
+
+### scores.js
+
+The `scores.js` reads the current high scores out of local storage and injects the values into the DOM usinng `createElement` and `appendChild` calls.
+
+### play.js
+
+This is where all the game play interactions occur. There are two classes one for `Button` and one for `Game`. The Button class handles the playing of the button's audio file, along with the change in color, when a button is pressed.
+
+The Game class manages the current sequence that a user is supposed to duplicate. This is done with the `reset` function to clear out the sequence and add a new random button, and the `playSequence` function that plays the sequence for the user to duplicate.
+
+## Study this code
+
+Get familiar with what the example code teaches.
+
+- Clone the repository to your development environment.
+
+  ```sh
+  git clone https://github.com/webprogramming260/simon-javascript.git
+  ```
+
+- Review the code and get comfortable with everything it represents.
+- View the code in your browser by hosting it using the VS Code Live Server extension.
+- Make modifications to the code as desired. Experiment and see what happens.
+
+## Deploy to production
+
+- Deploy to your production environment using a copy of the `deployFiles.sh` script found in the [example class application](https://github.com/webprogramming260/simon-javascript/blob/main/deployFiles.sh). Take some time to understand how it works.
+
+  ```sh
+  ./deployFiles.sh -k <yourpemkey> -h <yourdomain> -s simon
+  ```
+
+  For example,
+
+  ```sh
+  ./deployFiles.sh -k ~/keys/production.pem -h yourdomain.click -s simon
+  ```
+
+- Update your `startup` repository notes.md with what you learned.
+- Make sure your project is visible from your production environment (e.g. https://simon.yourdomain.click).
+
+

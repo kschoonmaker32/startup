@@ -278,6 +278,7 @@ input {
     resize: horizontal;
     width: auto;
     height: auto;
+    color: black;
 }
 
 table {
@@ -303,7 +304,7 @@ table {
     background-color: white;
   }
   */
-  
+
   @media (orientation: portrait) {
     main {
       flex-direction: column;

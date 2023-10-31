@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css">
     <!-- Tell browsers not to scale the viewport automatically -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kwordle HTML</title>
@@ -10,9 +11,10 @@
   <body>
     <!-- Use header, main, and footer elements to give semantic structure -->
     <header>
-      <h1>Kwordle<sup>&reg;</sup></h1>
+      <h1>Kwordle<sup></sup></h1>
 
       <!-- Navigation elements -->
+      
       <nav>
         <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
         <menu>
@@ -27,13 +29,26 @@
     </header>
 
     <main>
-      <h1>Welcome to Kwordle!</h1>
+      <div>
+      <h2>Welcome to Kwordle!</h2>
+    
+      </div>
+      <div>
       <p> Kwordle is a word game based on the popular Wordle game. In Kwordle, not only can you solve for the word of the day, but you can also compete against others to see who can solve it the fastest.</p>
+      </div>
+      <div>
       <p>Login to play</p>
+      </div>
       <form method="get" action="play.html">
+        <div>
         <label for="name">Name</label>
+        </div>
+        <div>
         <input type="text" id="name" placeholder="Your name here" />
+        </div>
+        <div>
         <button type="submit">Login</button>
+        </div>
       </form>
 
 

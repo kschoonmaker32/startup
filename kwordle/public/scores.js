@@ -1,3 +1,8 @@
+async function loadScores() {
+  const response = await fetch("/api/scores")
+  const scores = await response.json()
+}
+  // Modify the DOM to display the scores
 function loadScores() {
     let scores = [];
     const scoresText = localStorage.getItem('scores');

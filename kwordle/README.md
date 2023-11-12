@@ -1,3 +1,3 @@
-# kwordle-html
+# simon-service
 
-This deliverable demonstrates the use of basic HTML elements for structure, basic formatting, input, output, links, and drawing.
+This deliverable demonstrates converting the JavaScript application into a web application by implementing a web service that listens on a network port for HTTP requests.

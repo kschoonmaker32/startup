@@ -103,3 +103,8 @@ For this deliverable I used webSocket to update the leaderboard in realtime as o
 ## React deliverable
 
 For this deliverable I will use the React Framework to build the webapp. I am still learning the basic features of React, will update this section as I learn more.
+
+
+
+## updated javascript 
+for the javascript portion of my code, I was finally able to add interactivity to my web app to make it work. the login button now takes the player to the gameplay page. the game can also actually be played. letters can be typed in and will turn different colors depending on which letters are correct or in the correct placement. the navigation bar is also functioning, allowing the player to switch what page they are on. i am still currently working on getting the stats page and leaderboard up and running with real people. 

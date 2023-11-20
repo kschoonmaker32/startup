@@ -3,13 +3,12 @@ async function loadScores() {
   const scores = await response.json()
 }
   // Modify the DOM to display the scores
-function loadScores() {
+function loadUpScores() {
     let scores = [];
     const scoresText = localStorage.getItem('scores');
     if (scoresText) {
       scores = JSON.parse(scoresText);
     }
-  
     const tableBodyEl = document.querySelector('#scores');
   
     if (scores.length) {

@@ -197,30 +197,32 @@ document.getElementById("keyboard-cont").addEventListener("click", (e) => {
   }
 
   document.dispatchEvent(new KeyboardEvent("keyup", { key: key }));
+
+  function getPlayerName() {
+    return localStorage.getItem('userName') ?? 'Mystery player';
+  }
+
+  function setScore() {
+    localStorage.setItem('userScore', score);
+  }
+
+  setScore()
+
+  function getUserScore(){
+    return localStorage.getItem('userScore');
+  }
+
+  function saveScore() {
+    const userName = getPlayerName()
+    const userScore = getUserScore();
+    const date = new Date().toLocaleDateString();
+    const newScore = {name: userName, score: userScore, date: date};
+  }
+
 });
 
 
-function getPlayerName() {
-  return localStorage.getItem('userName') ?? 'Mystery player';
-}
-
-function setScore() {
-  localStorage.setItem('userScore', score)
-}
-
-setScore();
-
-function getUserScore() {
-  return localStorage.getItem('userScore');
-}
-
-
-/*function updateScore(score) {
-  const scoreEl = document.querySelector('#score');
-  scoreEl.textContent = score;
-}*/
-
-async function saveScore(score) {
+/*async function saveScore(score) {
   const userName = getPlayerName();
   const userScore = getUserScore();
   const date = new Date().toLocaleDateString();
@@ -268,10 +270,9 @@ function updateScoresLocal(newScore) {
 
   localStorage.setItem('scores', JSON.stringify(scores));
 }
-
+*/
 
 initBoard();
-setScore();
-saveScore();
+
 
 

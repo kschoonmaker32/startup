@@ -69,7 +69,7 @@ function checkGuess() {
 
   if (!WORDS.includes(guessString)) {
     toastr.error("Word not in list!");
-    return;
+    return
   }
 
   var letterColor = ["gray", "gray", "gray", "gray", "gray"];
@@ -110,6 +110,7 @@ function checkGuess() {
 
   if (guessString === rightGuessString) {
     toastr.success("You guessed right! Game over!");
+    toastr.success(`Your score was: "${score}"`);
     guessesRemaining = 0;
     return;
   } else {
@@ -203,6 +204,15 @@ function getPlayerName() {
   return localStorage.getItem('userName') ?? 'Mystery player';
 }
 
+function setScore() {
+  localStorage.setItem('userScore', score)
+}
+
+function getUserScore() {
+  return localStorage.getItem('userScore');
+}
+
+
 /*function updateScore(score) {
   const scoreEl = document.querySelector('#score');
   scoreEl.textContent = score;
@@ -210,8 +220,9 @@ function getPlayerName() {
 
 async function saveScore(score) {
   const userName = getPlayerName();
+  const userScore = getUserScore();
   const date = new Date().toLocaleDateString();
-  const newScore = {name: userName, score: score, date: date};
+  const newScore = {name: userName, score: userScore, date: date};
 
   try {
     const response = await fetch('/api/score', {
@@ -231,7 +242,7 @@ async function saveScore(score) {
 
 function updateScoresLocal(newScore) {
   let scores = [];
-  const scoresText = localStorage.getItem('scores');
+  const scoresText = localStorage.getItem('userScore');
   if (scoresText) {
     scores = JSON.parse(scoresText);
   }

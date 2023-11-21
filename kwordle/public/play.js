@@ -110,7 +110,7 @@ function checkGuess() {
 
   if (guessString === rightGuessString) {
     toastr.success("You guessed right! Game over!");
-    toastr.success(`Your score was: "${score}"`);
+    toastr.info(`Your score was: "${score}"`);
     guessesRemaining = 0;
     return;
   } else {
@@ -208,6 +208,8 @@ function setScore() {
   localStorage.setItem('userScore', score)
 }
 
+setScore();
+
 function getUserScore() {
   return localStorage.getItem('userScore');
 }
@@ -269,5 +271,7 @@ function updateScoresLocal(newScore) {
 
 
 initBoard();
+setScore();
+saveScore();
 
 

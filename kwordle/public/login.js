@@ -18,7 +18,7 @@ async function createUser() {
   loginOrCreate(`/api/auth/create`);
 }
 
-/*
+
 async function loginOrCreate(endpoint) {
   const userName = document.querySelector('#userName')?.value;
   const password = document.querySelector('#userPassword')?.value;
@@ -34,6 +34,7 @@ async function loginOrCreate(endpoint) {
     localStorage.setItem('userName', userName);
     window.location.href = 'play.html';
   } else {
+    console.log("big problems here, no good connection to db!!")
     const body = await response.json();
     const modalEl = document.querySelector('#msgModal');
     modalEl.querySelector('.modal-body').textContent = `⚠ Error: ${body.msg}`;
@@ -41,7 +42,7 @@ async function loginOrCreate(endpoint) {
     msgModal.show();
   }
 }
-*/
+
 
 function play() {
   window.location.href = 'play.html';

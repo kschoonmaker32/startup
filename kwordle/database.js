@@ -61,3 +61,26 @@ module.exports = {
   addScore,
   getHighScores,
 };
+
+const testuser = {
+  name: 'Mr Test',
+};
+const testscore = {
+  score: '5',
+};
+await userCollection.insertOne(testuser);
+await scoreCollection.insertOne(testscore);
+
+// Query the documents
+const query = { name: "Mr Test"};
+const options = {
+  sort: { score: -1 },
+  limit: 10,
+};
+
+const cursor = collection.find(query, options);
+const rentals = await cursor.toArray();
+rentals.forEach((i) => console.log(i));
+
+
+main().catch(console.error);

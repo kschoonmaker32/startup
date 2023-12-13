@@ -18,6 +18,7 @@ async function createUser() {
   loginOrCreate(`/api/auth/create`);
 }
 
+/*
 async function loginOrCreate(endpoint) {
   const userName = document.querySelector('#userName')?.value;
   const password = document.querySelector('#userPassword')?.value;
@@ -40,6 +41,7 @@ async function loginOrCreate(endpoint) {
     msgModal.show();
   }
 }
+*/
 
 function play() {
   window.location.href = 'play.html';

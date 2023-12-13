@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="style.css">
-    <script src="login.js"></script>
     <!-- Tell browsers not to scale the viewport automatically -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kwordle HTML</title>
@@ -39,12 +38,24 @@
       </div>
       <div>
       <p>Login to play</p>
-        <div>
-          <input type="text" id="name" placeholder="Your name here" />
-          <div>
-          <button onclick="login()">Login</button>
-          </div>
+      <div id="loginControls">
+        <div class="input-group mb-3">
+          <span class="input-group-text">@</span>
+          <input class="form-control" type="text" id="userName" placeholder="your@email.com" />
         </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text">🔒</span>
+          <input class="form-control" type="password" id="userPassword" placeholder="password" />
+        </div>
+        <button type="button" class="btn" onclick="loginUser()">Login</button>
+        <button type="button" class="btn" onclick="createUser()">Create</button>
+      </div>
+      <div id="playControls">
+        <div id="playerName"></div>
+        <button type="button" class="btn" onclick="play()">Play</button>
+        <button type="button" class="btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
       <!--<form method="get" action="play.html">
         <div>
         <label for="name">Name</label>
@@ -68,5 +79,6 @@
       <br />
       <a href="https://github.com/kschoonmaker32/startup/tree/main">GitHub</a>
     </footer>
+    <script src="login.js"></script>
   </body>
 </html>
